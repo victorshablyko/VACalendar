@@ -82,7 +82,7 @@ class VADayView: UIView {
             height: side
         )
         dateLabel.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
-
+        
         setState(day.state)
         addSubview(dateLabel)
         updateSupplementaryViews()
@@ -90,6 +90,7 @@ class VADayView: UIView {
     
     @objc
     private func didTapSelect() {
+        print("did tap for \(day.date)")
         guard day.state != .out && day.state != .unavailable else { return }
         delegate?.dayStateChanged(day)
     }
@@ -97,7 +98,7 @@ class VADayView: UIView {
     private func setState(_ state: VADayState) {
         if dayViewAppearanceDelegate?.shape?() == .circle && state == .selected {
             dateLabel.clipsToBounds = true
-            dateLabel.layer.cornerRadius = dateLabel.frame.height / 2
+            dateLabel.layer.cornerRadius = 6 //dateLabel.frame.height / 2
         }
         
         backgroundColor = dayViewAppearanceDelegate?.backgroundColor?(for: state) ?? backgroundColor
@@ -117,7 +118,7 @@ class VADayView: UIView {
             switch supplementary {
             case .bottomDots(let colors):
                 let stack = dotStackView
-
+                
                 colors.forEach { color in
                     let dotView = VADotView(size: dotSize, color: color)
                     stack.addArrangedSubview(dotView)
