@@ -3,6 +3,7 @@ import UIKit
 public protocol VAMonthHeaderViewDelegate: class {
     func didTapNextMonth()
     func didTapPreviousMonth()
+    func monthChanged(_ currentMonth: String)
 }
 
 public struct VAMonthHeaderViewAppearance {
@@ -69,10 +70,15 @@ public class VAMonthHeaderView: UIView {
         super.layoutSubviews()
         
         let buttonWidth: CGFloat = 50.0
-        monthLabel.frame = CGRect(x: 0, y: 0, width: appearance.monthTextWidth, height: frame.height)
-        monthLabel.center.x = center.x
-        previousButton.frame = CGRect(x: monthLabel.frame.minX - buttonWidth, y: 0, width: buttonWidth, height: frame.height)
-        nextButton.frame = CGRect(x: monthLabel.frame.maxX, y: 0, width: buttonWidth, height: frame.height)
+        //        monthLabel.frame = CGRect(x: 0, y: 0, width: appearance.monthTextWidth, height: frame.height)
+        //        monthLabel.center.x = center.x
+        //        previousButton.frame = CGRect(x: monthLabel.frame.minX - buttonWidth, y: 0, width: buttonWidth, height: frame.height)
+        //        nextButton.frame = CGRect(x: monthLabel.frame.maxX, y: 0, width: buttonWidth, height: frame.height)
+        
+        monthLabel.frame = CGRect(x: 0, y: 0, width: 100, height: frame.height)
+        //monthLabel.center.x = center.x
+        previousButton.frame = CGRect(x: monthLabel.frame.maxX, y: 0, width: buttonWidth, height: frame.height)
+        nextButton.frame = CGRect(x: monthLabel.frame.maxX + buttonWidth, y: 0, width: buttonWidth, height: frame.height)
     }
     
     private func setupView() {
@@ -80,7 +86,7 @@ public class VAMonthHeaderView: UIView {
         
         backgroundColor = .white
         monthLabel.font = appearance.monthFont
-        monthLabel.textAlignment = .center
+        monthLabel.textAlignment = .left
         monthLabel.textColor = appearance.monthTextColor
         
         previousButton.setImage(appearance.previousButtonImage, for: .normal)
@@ -112,6 +118,7 @@ extension VAMonthHeaderView: VACalendarMonthDelegate {
     
     public func monthDidChange(_ currentMonth: Date) {
         monthLabel.text = dateFormatter.string(from: currentMonth)
+        delegate?.monthChanged(dateFormatter.string(from: currentMonth))
     }
     
 }

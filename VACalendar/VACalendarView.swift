@@ -26,6 +26,8 @@ public protocol VACalendarViewDelegate: class {
     @objc optional func selectedDate(_ date: Date)
     // use this method for multi selection style
     @objc optional func selectedDates(_ dates: [Date])
+    //just to check what cell was tap to make seque
+    @objc optional func selectedDay(_ day: Date)
 }
 
 public class VACalendarView: UIScrollView {
@@ -107,6 +109,7 @@ public class VACalendarView: UIScrollView {
     }
     
     public func selectDates(_ dates: [Date]) {
+        print("VACalendarView selectDates: \(dates)")
         calendar.deselectAll()
         calendar.selectDates(dates)
     }
@@ -273,6 +276,7 @@ extension VACalendarView: VACalendarDelegate {
     
     func selectedDaysDidUpdate(_ days: [VADay]) {
         let dates = days.map { $0.date }
+        print("selectedDaysDidUpdate dates: \(dates)")
         calendarDelegate?.selectedDates?(dates)
     }
     
@@ -281,17 +285,30 @@ extension VACalendarView: VACalendarDelegate {
 extension VACalendarView: VAMonthViewDelegate {
     
     func dayStateChanged(_ day: VADay, in month: VAMonth) {
-        switch selectionStyle {
-        case .single:
-            guard day.state == .available else { return }
-            
-            calendar.deselectAll()
-            calendar.setDaySelectionState(day, state: .selected)
-            calendarDelegate?.selectedDate?(day.date)
-            
-        case .multi:
-            calendar.setDaySelectionState(day, state: day.reverseSelectionState)
+        print("dayStateChanged")
+        if day.isSelected {
+            print("day has entries")
+            calendarDelegate?.selectedDay?(day.date)
         }
+        //        switch selectionStyle {
+        //        case .single:
+        //            guard day.state == .available else { return }
+        //
+        //            calendar.deselectAll()
+        //            calendar.setDaySelectionState(day, state: .selected)
+        //            calendarDelegate?.selectedDate?(day.date)
+        //
+        //        case .multi:
+        //            calendar.setDaySelectionState(day, state: day.reverseSelectionState)
+        //        }
     }
+    
+}
+
+extension VACalendarView: VADayViewDelegate {
+    func dayStateChanged(_ day: VADay) {
+        print("did tap on \(day.date)")
+    }
+    
     
 }

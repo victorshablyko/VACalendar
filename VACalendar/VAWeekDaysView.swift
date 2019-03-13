@@ -74,7 +74,7 @@ public class VAWeekDaysView: UIView {
         
         dayLabels.enumerated().forEach { index, label in
             let x = index == 0 ? appearance.leftInset : dayLabels[index - 1].frame.maxX
-
+            
             label.frame = CGRect(
                 x: x,
                 y: 0,

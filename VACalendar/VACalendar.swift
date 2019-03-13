@@ -54,6 +54,7 @@ public class VACalendar {
     }
     
     func selectDates(_ dates: [Date]) {
+        print("VACalendar selectDates: \(dates)")
         let days = months.flatMap { $0.days(for: dates) }
         days.forEach { $0.setSelectionState(.selected) }
         selectedDays = days
